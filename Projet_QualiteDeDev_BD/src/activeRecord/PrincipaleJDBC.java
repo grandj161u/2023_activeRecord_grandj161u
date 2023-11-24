@@ -19,6 +19,12 @@ public class PrincipaleJDBC {
 
         Connection connect = DBConnection.getConnection();
 
+        DBConnection.setDbName("testbdpersonne");
+
+//        Personne.createTable();
+//        System.out.println(DBConnection.getDbName());
+//        Personne.deleteTable();
+
         // recuperation de toutes les personnes + affichage
         {
             System.out.println("4) Recupere les personnes de la table Personne");
@@ -41,8 +47,10 @@ public class PrincipaleJDBC {
         // recuperation de la seconde personne + affichage
         {
             System.out.println("6) Recupere personne d'id 2");
-            Personne p = Personne.findById(2);
-            System.out.println(p);
+            Personne p1 = Personne.findById(2);
+            System.out.println(p1);
+//            p1.delete();
+            System.out.println(p1);
         }
 
         {
@@ -50,6 +58,8 @@ public class PrincipaleJDBC {
             Personne p = Personne.findByName("Spielberg");
             System.out.println(p);
         }
+
+
 //
 //        // met a jour personne 2
 //        {

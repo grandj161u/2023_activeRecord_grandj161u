@@ -20,6 +20,7 @@ public class Personne {
 
     /**
      * Constructeur de la classe Personne
+     *
      * @param nomP
      * @param prenomP
      */
@@ -31,6 +32,7 @@ public class Personne {
 
     /**
      * Méthode findAll qui retourne une liste de personnes de toutes les personnes de la base de données
+     *
      * @return ArrayList<Personne>
      */
     public static ArrayList<Personne> findAll() {
@@ -60,6 +62,7 @@ public class Personne {
 
     /**
      * Méthode findById qui retourne une personne de la base de données en fonction de son id
+     *
      * @param id
      * @return Personne
      */
@@ -91,6 +94,7 @@ public class Personne {
 
     /**
      * Méthode findByName qui retourne une personne de la base de données en fonction de son nom
+     *
      * @param nom
      * @return Personne
      */
@@ -120,14 +124,109 @@ public class Personne {
         return persRes;
     }
 
-    public static void createTable(){
+    public static void createTable() {
         Connection connection = DBConnection.getConnection();
+
+        String SQLprep = "CREATE TABLE `Personne` ( " +
+                "  `id` int(11) NOT NULL AUTO_INCREMENT, " +
+                "  `nom` varchar(40) NOT NULL, " +
+                "  `prenom` varchar(40) NOT NULL, " +
+                "  PRIMARY KEY (`id`) " +
+                ") ENGINE=InnoDB DEFAULT CHARSET=latin1";
+        try {
+            PreparedStatement prep = connection.prepareStatement(SQLprep);
+            prep.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void deleteTable() {
+        Connection connection = DBConnection.getConnection();
+
+        String SQLprep = "DROP TABLE Personne";
+        try {
+            PreparedStatement prep = connection.prepareStatement(SQLprep);
+            prep.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void delete() {
+        Connection connection = DBConnection.getConnection();
+
+        String SQLprep = "DELETE FROM Personne WHERE nom = ? AND prenom = ?";
+        try {
+            PreparedStatement prep = connection.prepareStatement(SQLprep);
+            prep.setString(1, this.nom);
+            prep.setString(2, this.prenom);
+            prep.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        setId(-1);
+    }
+
+    public void save() {
+        if (getId() == -1) {
+            this.saveNew();
+        } else {
+            this.update();
+        }
+    }
+
+    private void saveNew() {
+        Connection connection = DBConnection.getConnection();
+
+        String SQLprep = "INSERT INTO `Personne` (`nom`, `prenom`) VALUES (?, ?)";
+        try {
+            PreparedStatement prep = connection.prepareStatement(SQLprep);
+            prep.setString(1, getNom());
+            prep.setString(2, getPrenom());
+            prep.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        SQLprep = "SELECT id FROM Personne WHERE nom = ?";
+        try {
+            PreparedStatement prep = connection.prepareStatement(SQLprep);
+            prep.setString(1, getNom());
+            ResultSet resultSet = prep.executeQuery();
+
+            if (resultSet.next()) {
+                int idRecup = resultSet.getInt("id");
+                setId(idRecup);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
 
     }
 
+    private void update() {
+        Connection connection = DBConnection.getConnection();
+
+        String SQLprep = "INSERT INTO `Personne` (`id`, `nom`, `prenom`) VALUES (?, ?, ?)";
+        try {
+            PreparedStatement prep = connection.prepareStatement(SQLprep);
+            prep.setInt(1, getId());
+            prep.setString(2, getNom());
+            prep.setString(3, getPrenom());
+            prep.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Méthode toString qui retourne une chaîne de caractères représentant une personne
+     *
      * @return String
      */
     public String toString() {
@@ -142,6 +241,7 @@ public class Personne {
 
     /**
      * Méthode getId qui retourne l'id d'une personne
+     *
      * @return int
      */
     public int getId() {
@@ -150,6 +250,7 @@ public class Personne {
 
     /**
      * Methode getNom qui retourne le nom d'une personne
+     *
      * @return String
      */
     public String getNom() {
@@ -158,6 +259,7 @@ public class Personne {
 
     /**
      * Méthode getPrenom qui retourne le prénom d'une personne
+     *
      * @return String
      */
     public String getPrenom() {
@@ -166,6 +268,7 @@ public class Personne {
 
     /**
      * Méthode setId qui modifie l'id d'une personne
+     *
      * @param id
      */
     public void setId(int id) {

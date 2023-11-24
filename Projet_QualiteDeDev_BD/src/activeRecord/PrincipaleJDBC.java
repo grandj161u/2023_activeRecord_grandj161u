@@ -44,6 +44,12 @@ public class PrincipaleJDBC {
             Personne p = Personne.findById(2);
             System.out.println(p);
         }
+
+        {
+            System.out.println("7) Recupere personne de nom Spielberg");
+            Personne p = Personne.findByName("Spielberg");
+            System.out.println(p);
+        }
 //
 //        // met a jour personne 2
 //        {

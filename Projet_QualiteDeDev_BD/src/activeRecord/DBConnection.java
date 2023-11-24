@@ -57,6 +57,10 @@ public class DBConnection {
         return connexion;
     }
 
+    /**
+     * Méthode setDbName qui modifie le nom de la base de données
+     * @param nomDB
+     */
     public static void setDbName(String nomDB) {
         dbName = nomDB;
     }

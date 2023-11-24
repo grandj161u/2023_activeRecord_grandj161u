@@ -63,4 +63,14 @@ public class TestConnexion {
 
         assertEquals(persTest.toString(), persQuiTest.toString());
     }
+
+    @Test
+    public void testFindByName() throws SQLException {
+        Personne persTest = Personne.findByName("Spielberg");
+
+        Personne persQuiTest = new Personne("Spielberg", "Steven");
+        persQuiTest.setId(1);
+
+        assertEquals(persTest.toString(), persQuiTest.toString());
+    }
 }

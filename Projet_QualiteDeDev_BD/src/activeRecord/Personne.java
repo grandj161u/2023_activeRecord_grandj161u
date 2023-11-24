@@ -6,20 +6,33 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Classe Personne qui représente une personne par rapport à la base de données
+ */
 public class Personne {
 
+    /**
+     * Attributs de la classe Personne
+     */
     private int id;
-
     private String nom;
-
     private String prenom;
 
+    /**
+     * Constructeur de la classe Personne
+     * @param nomP
+     * @param prenomP
+     */
     public Personne(String nomP, String prenomP) {
         this.id = -1;
         this.nom = nomP;
         this.prenom = prenomP;
     }
 
+    /**
+     * Méthode findAll qui retourne une liste de personnes de toutes les personnes de la base de données
+     * @return ArrayList<Personne>
+     */
     public static ArrayList<Personne> findAll() {
 
         ArrayList<Personne> listRes = new ArrayList<>();
@@ -45,6 +58,11 @@ public class Personne {
         return listRes;
     }
 
+    /**
+     * Méthode findById qui retourne une personne de la base de données en fonction de son id
+     * @param id
+     * @return Personne
+     */
     public static Personne findById(int id) {
         Personne persRes = null;
         Connection connection = DBConnection.getConnection();
@@ -71,6 +89,47 @@ public class Personne {
         return persRes;
     }
 
+    /**
+     * Méthode findByName qui retourne une personne de la base de données en fonction de son nom
+     * @param nom
+     * @return Personne
+     */
+    public static Personne findByName(String nom) {
+        Personne persRes = null;
+        Connection connection = DBConnection.getConnection();
+
+        String SQLprep = "SELECT * FROM Personne WHERE nom = ?";
+        try {
+            PreparedStatement prep = connection.prepareStatement(SQLprep);
+            prep.setString(1, nom);
+            ResultSet rs = prep.executeQuery();
+
+            if (rs.next()) {
+                String nomPers = rs.getString("nom");
+                String prenomPers = rs.getString("prenom");
+                int idPers = rs.getInt("id");
+
+                persRes = new Personne(nomPers, prenomPers);
+                persRes.setId(idPers);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return persRes;
+    }
+
+    public static void createTable(){
+        Connection connection = DBConnection.getConnection();
+
+
+    }
+
+    /**
+     * Méthode toString qui retourne une chaîne de caractères représentant une personne
+     * @return String
+     */
     public String toString() {
         String ch = "";
         ch += "######################\n";
@@ -81,18 +140,34 @@ public class Personne {
         return ch;
     }
 
+    /**
+     * Méthode getId qui retourne l'id d'une personne
+     * @return int
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Methode getNom qui retourne le nom d'une personne
+     * @return String
+     */
     public String getNom() {
         return nom;
     }
 
+    /**
+     * Méthode getPrenom qui retourne le prénom d'une personne
+     * @return String
+     */
     public String getPrenom() {
         return prenom;
     }
 
+    /**
+     * Méthode setId qui modifie l'id d'une personne
+     * @param id
+     */
     public void setId(int id) {
         this.id = id;
     }

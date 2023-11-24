@@ -24,7 +24,7 @@ public class PrincipaleJDBC {
             System.out.println("4) Recupere les personnes de la table Personne");
             ArrayList<Personne> listPers = Personne.findAll();
 
-            for (Personne p : listPers){
+            for (Personne p : listPers) {
                 System.out.println(p);
             }
         }
@@ -38,23 +38,12 @@ public class PrincipaleJDBC {
 //            System.out.println();
 //        }
 //
-//        // recuperation de la seconde personne + affichage
-//        {
-//            System.out.println("6) Recupere personne d'id 2");
-//            String SQLPrep = "SELECT * FROM Personne WHERE id=?;";
-//            PreparedStatement prep1 = connect.prepareStatement(SQLPrep);
-//            prep1.setInt(1, 2);
-//            prep1.execute();
-//            ResultSet rs = prep1.getResultSet();
-//            // s'il y a un resultat
-//            if (rs.next()) {
-//                String nom = rs.getString("nom");
-//                String prenom = rs.getString("prenom");
-//                int id = rs.getInt("id");
-//                System.out.println("  -> (" + id + ") " + nom + ", " + prenom);
-//            }
-//            System.out.println();
-//        }
+        // recuperation de la seconde personne + affichage
+        {
+            System.out.println("6) Recupere personne d'id 2");
+            Personne p = Personne.findById(2);
+            System.out.println(p);
+        }
 //
 //        // met a jour personne 2
 //        {

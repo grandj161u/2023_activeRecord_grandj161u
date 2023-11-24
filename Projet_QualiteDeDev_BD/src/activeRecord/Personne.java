@@ -45,7 +45,33 @@ public class Personne {
         return listRes;
     }
 
-    public String toString(){
+    public static Personne findById(int id) {
+        Personne persRes = null;
+        Connection connection = DBConnection.getConnection();
+
+        String SQLprep = "SELECT * FROM Personne WHERE id = ?";
+        try {
+            PreparedStatement prep = connection.prepareStatement(SQLprep);
+            prep.setInt(1, id);
+            ResultSet rs = prep.executeQuery();
+
+            if (rs.next()) {
+                String nom = rs.getString("nom");
+                String prenom = rs.getString("prenom");
+                int idPers = rs.getInt("id");
+
+                persRes = new Personne(nom, prenom);
+                persRes.setId(idPers);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return persRes;
+    }
+
+    public String toString() {
         String ch = "";
         ch += "######################\n";
         ch += "# Id : " + getId() + "\n";
@@ -67,5 +93,7 @@ public class Personne {
         return prenom;
     }
 
-
+    public void setId(int id) {
+        this.id = id;
+    }
 }

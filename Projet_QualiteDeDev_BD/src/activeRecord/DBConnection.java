@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+/**
+ * Classe DBConnection qui retourne un objet pour se connecter à la base de donnée
+ */
 public class DBConnection {
 
     /**
@@ -21,19 +24,48 @@ public class DBConnection {
     private static final String serverName = "localhost";
     private static String dbName = "testpersonne";
 
-    public static Connection getConnection() throws SQLException {
-        if (connexion == null) {
+    /**
+     * Méthode getConnexion qui retourne un objet connexion s'il existe
+     *
+     * @return Connection
+     */
+    public static Connection getConnection() {
+        String nomDB = null;
+
+        if (connexion != null) {
+            try {
+                nomDB = connexion.getCatalog();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        if (connexion == null || !dbName.equals(nomDB)) {
+            //Si l'objet connexion est null on le rempli
             Properties connectionProps = new Properties();
             connectionProps.put("user", userName);
             connectionProps.put("password", password);
             String urlDB = "jdbc:mysql://" + serverName + ":";
             urlDB += portNumber + "/" + dbName;
-            connexion = DriverManager.getConnection(urlDB, connectionProps);
+
+            try {
+                connexion = DriverManager.getConnection(urlDB, connectionProps);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
         return connexion;
     }
 
-    public void setNomDB(String nomDB) {
+    public static void setDbName(String nomDB) {
         dbName = nomDB;
+    }
+
+    public static String getDbName() {
+        try {
+            return connexion.getCatalog();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

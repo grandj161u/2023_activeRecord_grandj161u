@@ -98,8 +98,8 @@ public class Personne {
      * @param nom
      * @return Personne
      */
-    public static Personne findByName(String nom) {
-        Personne persRes = null;
+    public static ArrayList<Personne> findByName(String nom) {
+        ArrayList<Personne> listRes = new ArrayList<>();
         Connection connection = DBConnection.getConnection();
 
         String SQLprep = "SELECT * FROM Personne WHERE nom = ?";
@@ -108,20 +108,21 @@ public class Personne {
             prep.setString(1, nom);
             ResultSet rs = prep.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 String nomPers = rs.getString("nom");
-                String prenomPers = rs.getString("prenom");
+                String prenom = rs.getString("prenom");
                 int idPers = rs.getInt("id");
-
-                persRes = new Personne(nomPers, prenomPers);
-                persRes.setId(idPers);
+                Personne personne = new Personne(nom, prenom);
+                personne.setId(idPers);
+                listRes.add(personne);
             }
+
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return persRes;
+        return listRes;
     }
 
     public static void createTable() {
@@ -211,12 +212,12 @@ public class Personne {
     private void update() {
         Connection connection = DBConnection.getConnection();
 
-        String SQLprep = "INSERT INTO `Personne` (`id`, `nom`, `prenom`) VALUES (?, ?, ?)";
+        String SQLprep = "UPDATE Personne SET nom=?, prenom=? WHERE id=?";
         try {
             PreparedStatement prep = connection.prepareStatement(SQLprep);
-            prep.setInt(1, getId());
-            prep.setString(2, getNom());
-            prep.setString(3, getPrenom());
+            prep.setString(1, getNom());
+            prep.setString(2, getPrenom());
+            prep.setInt(3, getId());
             prep.executeUpdate();
 
         } catch (SQLException e) {
@@ -274,4 +275,14 @@ public class Personne {
     public void setId(int id) {
         this.id = id;
     }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
+    }
+
+
 }

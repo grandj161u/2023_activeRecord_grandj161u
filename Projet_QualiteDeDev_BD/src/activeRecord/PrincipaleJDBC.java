@@ -53,11 +53,11 @@ public class PrincipaleJDBC {
             System.out.println(p1);
         }
 
-        {
-            System.out.println("7) Recupere personne de nom Spielberg");
-            Personne p = Personne.findByName("Spielberg");
-            System.out.println(p);
-        }
+//        {
+//            System.out.println("7) Recupere personne de nom Spielberg");
+//            Personne p = Personne.findByName("Spielberg");
+//            System.out.println(p);
+//        }
 
 
 //
